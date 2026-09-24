@@ -51,6 +51,17 @@ jobs:
           grep -q "GG Radar" _site/index.html
           grep -q "Vuelve a Brawl Stars sin perderte" _site/index.html
           grep -q "GG_RADAR_API_BASE" _site/index.html
+      - name: Check deployed inline JavaScript
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          html = Path("_site/index.html").read_text()
+          scripts = re.findall(r'<script(?![^>]*\\bsrc=)[^>]*>(.*?)</script>', html, flags=re.I | re.S)
+          Path("_site/inline-check.js").write_text("\\n;\\n".join(scripts))
+          PY
+          node --check _site/inline-check.js
+          rm _site/inline-check.js
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:
