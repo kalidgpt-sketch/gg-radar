@@ -37,8 +37,8 @@ jobs:
           marker = "  <script>\nwindow.GGRadarData = {"
           if '<script src="./config.js"></script>' not in s:
               s = s.replace(marker, '  <script src="./config.js"></script>\n' + marker)
-          old = "      const r=await fetch(\`/api/player?tag=\${encodeURIComponent(tag)}\`,{headers:{'accept':'application/json'}});"
-          new = "      const apiBase=(window.GG_RADAR_API_BASE||'').replace(/\\\/$/,'');\n      if(!apiBase) throw new Error('Player Tags reales pendientes de conectar al backend seguro.');\n      const r=await fetch(\`\${apiBase}/api/player?tag=\${encodeURIComponent(tag)}\`,{headers:{'accept':'application/json'}});"
+          old = "      const r=await fetch(`/api/player?tag=${encodeURIComponent(tag)}`,{headers:{'accept':'application/json'}});"
+          new = "      const apiBase=(window.GG_RADAR_API_BASE||'').replace(/\\/$/,'');\n      if(!apiBase) throw new Error('Player Tags reales pendientes de conectar al backend seguro.');\n      const r=await fetch(`${apiBase}/api/player?tag=${encodeURIComponent(tag)}`,{headers:{'accept':'application/json'}});"
           if old in s:
               s = s.replace(old, new)
           elif 'GG_RADAR_API_BASE' not in s:
