@@ -198,20 +198,50 @@
     `;
   }
 
+  function accountErrorView(error){
+    const code=error?.code || 'UNKNOWN';
+    const views={
+      MISSING_PLAYER_TAG:['Falta el Player Tag','Escribe el tag que aparece debajo de tu nombre en Brawl Stars.'],
+      INVALID_PLAYER_TAG:['Player Tag no válido',error?.message || 'Revisa el tag e inténtalo de nuevo.'],
+      PLAYER_NOT_FOUND:['Jugador no encontrado','No encontramos una cuenta con ese Player Tag.'],
+      RATE_LIMITED:['Demasiadas consultas','Espera un momento antes de volver a intentarlo.'],
+      UPSTREAM_RATE_LIMITED:['API oficial ocupada','Brawl Stars está limitando temporalmente las consultas.'],
+      UPSTREAM_TIMEOUT:['Brawl Stars tarda demasiado','La API oficial no respondió a tiempo. Prueba otra vez.'],
+      UPSTREAM_UNAVAILABLE:['API oficial no disponible','Brawl Stars no está respondiendo correctamente en este momento.'],
+      UPSTREAM_NETWORK:['Problema de conexión','Nuestro servidor no pudo conectar con la API oficial.'],
+      UPSTREAM_AUTH_FAILED:['API todavía no autorizada','Falta terminar la autorización segura entre Fly.io y Brawl Stars Developer.'],
+      API_NOT_CONFIGURED:['API todavía no conectada','El backend está preparado, pero falta activar la clave oficial de Brawl Stars.'],
+      ORIGIN_NOT_ALLOWED:['Origen no permitido','La consulta fue bloqueada por seguridad.']
+    };
+    const [title,message]=views[code] || ['No se pudo consultar la cuenta',error?.message || 'Prueba de nuevo dentro de unos segundos.'];
+    const ref=error?.requestId ? `<small>Referencia: ${esc(error.requestId)}</small>` : '';
+    return `<div class="account-empty"><span>!</span><h3>${esc(title)}</h3><p>${esc(message)}</p>${ref}</div>`;
+  }
+
   async function analyze(){
-    const raw=$('#playerTag').value.trim(); const tag=raw.replace(/^#/,'').toUpperCase();
+    const raw=$('#playerTag').value.trim();
+    const tag=raw.replace(/^#/,'').toUpperCase().replaceAll('O','0');
     if(!tag){return}
     const btn=$('#analyzeAccount'); const old=btn.textContent; btn.disabled=true;btn.textContent='Consultando…';
     try{
       if(tag==='DEMO'){ renderProfile(D.demoProfile); return; }
       const apiBase=(window.GG_RADAR_API_BASE||'').replace(/\/$/,'');
-      if(!apiBase) throw new Error('El backend seguro todavía no está configurado.');
+      if(!apiBase) {
+        const e=new Error('El backend seguro todavía no está configurado.');
+        e.code='API_NOT_CONFIGURED';
+        throw e;
+      }
       const r=await fetch(`${apiBase}/api/player?tag=${encodeURIComponent(tag)}`,{headers:{'accept':'application/json'}});
       const body=await r.json().catch(()=>({}));
-      if(!r.ok) throw new Error(body.message || 'No se pudo consultar la cuenta.');
+      if(!r.ok){
+        const e=new Error(body?.error?.message || body?.message || 'No se pudo consultar la cuenta.');
+        e.code=body?.error?.code || 'UNKNOWN';
+        e.requestId=body?.requestId || r.headers.get('x-request-id') || '';
+        throw e;
+      }
       renderProfile(body);
     }catch(err){
-      $('#accountResult').innerHTML=`<div class="account-empty"><span>!</span><h3>API no conectada</h3><p>${esc(err.message || 'Configura BRAWL_API_TOKEN en el hosting para consultar tags reales.')} Puedes probar con <b>DEMO</b>.</p></div>`;
+      $('#accountResult').innerHTML=accountErrorView(err);
     }finally{btn.disabled=false;btn.textContent=old}
   }
   $('#analyzeAccount')?.addEventListener('click',analyze);
