@@ -30,6 +30,8 @@ jobs:
           mkdir -p _site
           cat site/index.b64.* | tr -d '\n' | base64 --decode > _site/index.html
           cp site/config.js _site/config.js
+          cp site/robots.txt _site/robots.txt
+          cp site/sitemap.xml _site/sitemap.xml
           python - <<'PY'
           from pathlib import Path
           p = Path('_site/index.html')
