@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kalidgpt-sketch.github.io/gg-radar/sitemap.xml
