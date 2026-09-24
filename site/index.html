@@ -73,10 +73,6 @@
       </div>
     </section>
 
-    <section class="ad-shell shell" aria-label="Espacio publicitario">
-      <div class="ad-slot ad-wide"><span>ANUNCIO</span><small>970 × 90</small></div>
-    </section>
-
     <section class="section" id="cambios">
       <div class="shell">
         <div class="section-heading">
@@ -117,6 +113,12 @@
       </div>
     </section>
 
+    <section class="ad-shell shell" data-ad-zone="after-changes" aria-label="Publicidad" hidden>
+      <div class="ad-slot ad-wide" data-ad-container>
+        <span>PUBLICIDAD</span><small>Espacio reservado · responsive</small>
+      </div>
+    </section>
+
     <section class="section alt" id="parche">
       <div class="shell">
         <div class="section-heading split">
@@ -127,8 +129,10 @@
       </div>
     </section>
 
-    <section class="ad-shell shell" aria-label="Espacio publicitario">
-      <div class="ad-slot ad-mid"><span>ANUNCIO</span><small>Responsive</small></div>
+    <section class="ad-shell shell" data-ad-zone="between-tools" aria-label="Publicidad" hidden>
+      <div class="ad-slot ad-mid" data-ad-container>
+        <span>PUBLICIDAD</span><small>Espacio reservado · responsive</small>
+      </div>
     </section>
 
     <section class="section" id="calculadora">
@@ -174,6 +178,12 @@
       </div>
     </section>
 
+    <section class="ad-shell shell" data-ad-zone="after-account" aria-label="Publicidad" hidden>
+      <div class="ad-slot ad-mid" data-ad-container>
+        <span>PUBLICIDAD</span><small>Fase 2 · no activar al lanzamiento</small>
+      </div>
+    </section>
+
     <section class="section compact">
       <div class="shell">
         <div class="why-grid">
@@ -189,7 +199,7 @@
     <div class="shell footer-grid">
       <div><a class="brand footer-brand" href="#inicio"><span class="brand-mark">GG</span><span>Radar</span></a><p>Herramientas independientes para jugadores.</p></div>
       <div><strong>Proyecto</strong><a href="#cambios">Cambios</a><a href="#calculadora">Calculadora</a><a href="#cuenta">Mi cuenta</a></div>
-      <div><strong>Legal</strong><a href="./privacy.html">Privacidad</a><a href="./cookies.html">Cookies</a><a href="./about.html">Sobre GG Radar</a><p class="legal">Este material no es oficial y no está respaldado por Supercell. Brawl Stars y Supercell son marcas de sus respectivos propietarios.</p></div>
+      <div><strong>Legal</strong><a href="./privacy.html">Privacidad</a><a href="./cookies.html">Cookies</a><a href="./about.html">Sobre GG Radar</a><button class="privacy-choices" id="privacyChoices" type="button" hidden>Configuración de privacidad y cookies</button><p class="legal">Este material no es oficial y no está respaldado por Supercell. Brawl Stars y Supercell son marcas de sus respectivos propietarios.</p></div>
     </div>
     <div class="shell footer-bottom"><span>© 2026 GG Radar</span><span>Datos de balance: fuentes públicas oficiales de Supercell.</span></div>
   </footer>
@@ -197,5 +207,6 @@
   <script src="./config.js"></script>
   <script src="./data.js"></script>
   <script src="./app.js"></script>
+  <script src="./ads.js"></script>
 </body>
 </html>
