@@ -58,7 +58,7 @@ jobs:
           import re
           html = Path("_site/index.html").read_text()
           scripts = re.findall(r'<script(?![^>]*\\bsrc=)[^>]*>(.*?)</script>', html, flags=re.I | re.S)
-          Path("_site/inline-check.js").write_text("\\n;\\n".join(scripts))
+          Path("_site/inline-check.js").write_text("\n;\n".join(scripts))
           PY
           node --check _site/inline-check.js
           rm _site/inline-check.js
