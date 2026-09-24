@@ -34,6 +34,7 @@ jobs:
           cp site/styles.css _site/styles.css
           cp site/data.js _site/data.js
           cp site/app.js _site/app.js
+          cp site/ads.js _site/ads.js
           cp site/config.js _site/config.js
           cp site/robots.txt _site/robots.txt
           cp site/sitemap.xml _site/sitemap.xml
@@ -53,6 +54,7 @@ jobs:
         run: |
           node --check site/data.js
           node --check site/app.js
+          node --check site/ads.js
 
       - name: Check internal production links
         run: |
@@ -60,6 +62,8 @@ jobs:
           grep -q 'href="./cookies.html"' _site/index.html
           grep -q 'href="./about.html"' _site/index.html
           grep -q 'https://gg-radar-api-kalid577.fly.dev' _site/config.js
+          grep -q 'enabled: false' _site/config.js
+          grep -q 'GG_RADAR_ADS' _site/config.js
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
