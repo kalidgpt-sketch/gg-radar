@@ -27,9 +27,26 @@ jobs:
         run: |
           mkdir -p _site
           cat site/index.b64.* | tr -d '\n' | base64 --decode > _site/index.html
+          cp site/config.js _site/config.js
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('_site/index.html')
+          s = p.read_text()
+          marker = "  <script>\nwindow.GGRadarData = {"
+          if '<script src="./config.js"></script>' not in s:
+              s = s.replace(marker, '  <script src="./config.js"></script>\n' + marker)
+          old = "      const r=await fetch(\`/api/player?tag=\${encodeURIComponent(tag)}\`,{headers:{'accept':'application/json'}});"
+          new = "      const apiBase=(window.GG_RADAR_API_BASE||'').replace(/\\\/$/,'');\n      if(!apiBase) throw new Error('Player Tags reales pendientes de conectar al backend seguro.');\n      const r=await fetch(\`\${apiBase}/api/player?tag=\${encodeURIComponent(tag)}\`,{headers:{'accept':'application/json'}});"
+          if old in s:
+              s = s.replace(old, new)
+          elif 'GG_RADAR_API_BASE' not in s:
+              raise SystemExit('No se pudo preparar el endpoint seguro del frontend')
+          p.write_text(s)
+          PY
           test -s _site/index.html
           grep -q "GG Radar" _site/index.html
           grep -q "Vuelve a Brawl Stars sin perderte" _site/index.html
+          grep -q "GG_RADAR_API_BASE" _site/index.html
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:
