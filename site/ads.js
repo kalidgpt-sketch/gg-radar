@@ -2,6 +2,14 @@
   const cfg = window.GG_RADAR_ADS || {};
   if (cfg.enabled !== true) return;
 
+  const readiness = cfg.readiness || {};
+  const gates = ['productionDomainReady', 'siteApproved', 'cmpConfigured', 'adsTxtPublished'];
+  const missingGate = gates.find((gate) => readiness[gate] !== true);
+  if (missingGate) {
+    console.warn(`GG Radar Ads: gate no preparado: ${missingGate}.`);
+    return;
+  }
+
   const client = String(cfg.client || '').trim();
   if (!/^ca-pub-\d+$/.test(client)) {
     console.warn('GG Radar Ads: falta un AdSense client válido.');
@@ -25,9 +33,10 @@
   if (privacyButton) {
     privacyButton.hidden = false;
     privacyButton.addEventListener('click', () => {
-      window.googlefc = window.googlefc || {};
+      const showRevocation = window.googlefc?.showRevocationMessage;
+      if (typeof showRevocation !== 'function') return;
       window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
-      window.googlefc.callbackQueue.push(window.googlefc.showRevocationMessage);
+      window.googlefc.callbackQueue.push(showRevocation);
     });
   }
 
