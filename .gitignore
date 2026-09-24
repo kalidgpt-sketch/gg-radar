@@ -1,0 +1,16 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+# Dependencies / logs
+node_modules/
+*.log
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
