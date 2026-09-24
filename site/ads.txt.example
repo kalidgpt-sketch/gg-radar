@@ -1,0 +1,6 @@
+# EJEMPLO SOLAMENTE — NO PUBLICAR ASÍ.
+# Sustituir PUB_ID por el publisher ID real copiado desde AdSense.
+# El archivo real debe quedar disponible en:
+# https://DOMINIO-DE-PRODUCCION/ads.txt
+
+google.com, pub-PUB_ID, DIRECT, f08c47fec0942fa0
