@@ -31,6 +31,9 @@ jobs:
         run: |
           mkdir -p _site
           cp site/index.html _site/index.html
+          cp site/styles.css _site/styles.css
+          cp site/data.js _site/data.js
+          cp site/app.js _site/app.js
           cp site/config.js _site/config.js
           cp site/robots.txt _site/robots.txt
           cp site/sitemap.xml _site/sitemap.xml
@@ -46,20 +49,10 @@ jobs:
           grep -q "Política de cookies" _site/cookies.html
           grep -q "Sobre GG Radar" _site/about.html
 
-      - name: Check deployed inline JavaScript
+      - name: Check production JavaScript
         run: |
-          python - <<'PY'
-          from pathlib import Path
-          import re
-          html = Path("_site/index.html").read_text()
-          scripts = [
-              s for attrs, s in re.findall(r'<script([^>]*)>(.*?)</script>', html, flags=re.I | re.S)
-              if 'src=' not in attrs.lower() and 'application/ld+json' not in attrs.lower()
-          ]
-          Path("_site/inline-check.js").write_text("\n;\n".join(scripts))
-          PY
-          node --check _site/inline-check.js
-          rm _site/inline-check.js
+          node --check site/data.js
+          node --check site/app.js
 
       - name: Check internal production links
         run: |
