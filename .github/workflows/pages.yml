@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+      - name: Check secure API backend
+        run: node --check backend/server.mjs
       - name: Build static site
         run: |
           mkdir -p _site
