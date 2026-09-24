@@ -49,6 +49,7 @@ jobs:
           grep -q "Privacidad" _site/privacy.html
           grep -q "Política de cookies" _site/cookies.html
           grep -q "Sobre GG Radar" _site/about.html
+          test ! -e _site/ads.txt
 
       - name: Check production JavaScript
         run: |
@@ -64,6 +65,10 @@ jobs:
           grep -q 'https://gg-radar-api-kalid577.fly.dev' _site/config.js
           grep -q 'enabled: false' _site/config.js
           grep -q 'GG_RADAR_ADS' _site/config.js
+          grep -q 'productionDomainReady: false' _site/config.js
+          grep -q 'siteApproved: false' _site/config.js
+          grep -q 'cmpConfigured: false' _site/config.js
+          grep -q 'adsTxtPublished: false' _site/config.js
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
